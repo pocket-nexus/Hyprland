@@ -299,7 +299,6 @@ CHyprOpenGLImpl::CHyprOpenGLImpl() : m_drmFD(g_pCompositor->m_drmRenderNode.fd >
     loadGLProc(&m_proc.eglQueryDmaBufFormatsEXT, "eglQueryDmaBufFormatsEXT");
     loadGLProc(&m_proc.eglQueryDmaBufModifiersEXT, "eglQueryDmaBufModifiersEXT");
     loadGLProc(&m_proc.glEGLImageTargetTexture2DOES, "glEGLImageTargetTexture2DOES");
-    loadGLProc(&m_proc.eglDebugMessageControlKHR, "eglDebugMessageControlKHR");
     loadGLProc(&m_proc.eglGetPlatformDisplayEXT, "eglGetPlatformDisplayEXT");
     loadGLProc(&m_proc.eglCreateSyncKHR, "eglCreateSyncKHR");
     loadGLProc(&m_proc.eglDestroySyncKHR, "eglDestroySyncKHR");
@@ -330,7 +329,7 @@ CHyprOpenGLImpl::CHyprOpenGLImpl() : m_drmFD(g_pCompositor->m_drmRenderNode.fd >
     RASSERT(eglBindAPI(EGL_OPENGL_ES_API) != EGL_FALSE, "Couldn't bind to EGL's opengl ES API. This means your gpu driver f'd up. This is not a hyprland issue.");
 
     bool success = false;
-    if (EGLEXTENSIONS.contains("EXT_platform_device") || !m_proc.eglQueryDevicesEXT || !m_proc.eglQueryDeviceStringEXT) {
+    if (EGLEXTENSIONS.contains("EXT_platform_device") && m_proc.eglQueryDevicesEXT && m_proc.eglQueryDeviceStringEXT) {
         m_eglDevice = eglDeviceFromDRMFD(m_drmFD);
 
         if (m_eglDevice != EGL_NO_DEVICE_EXT) {
